@@ -1,13 +1,14 @@
 var Stream = require('./stream')
 
-module.exports = map
+module.exports = spy
 
-function map (lambda) {
+function spy (lambda) {
   var stream = Stream()
 
   return { broadcast: broadcast, listen: stream.listen }
 
   function broadcast (value) {
-    stream.broadcast(lambda(value))
+    lambda(value)
+    stream.broadcast(value)
   }
 }

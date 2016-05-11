@@ -10,9 +10,20 @@ npm install --save push-stream
 
 for a much better way of doing streaming, see [`pull-stream`](https://github.com/dominictarr/pull-stream).
 
-this is just an experiment to handle specific use cases.
+the difference from this and `pull-stream` is that push streams are subscribed to by subscribers, and when any data is pushed it is broadcasted to all subscribers.
+
+inspiration:
+
+- [geval](https://github.com/Raynos/geval)
+- [observ](https://github.com/Raynos/observ)
+- [zen-observable](https://github.com/zenparsing/zen-observable)
 
 ## usage
+
+a "push stream" is an object with
+
+- `broadcast` function to send values to subscribers
+- `listen` function to subscribe to stream, returns function to unlisten
 
 ### `push = require('push-stream')`
 
