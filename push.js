@@ -1,8 +1,10 @@
 module.exports = push
 
 function push () {
+  var removeListenerCbs = []
+
   if (arguments.length === 1) {
-    return arguments[0]
+    return removeListeners
   }
 
   var source, sink
@@ -10,8 +12,15 @@ function push () {
     source = arguments[i]
     sink = arguments[i + 1]
     // TODO unlisteners?
-    source.listen(sink.broadcast)
+    var removeListener = source.listen(sink.broadcast)
+    removeListenerCbs.push(removeListener)
   }
 
-  return sink
+  return removeListeners
+
+  function removeListeners () {
+    for (var i = 0; i < removeListenerCbs.length; i++) {
+      removeListenerCbs[i]()
+    }
+  }
 }
