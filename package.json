@@ -1,6 +1,6 @@
 {
   "name": "push-stream",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "minimal pipeable push stream",
   "main": "index.js",
   "scripts": {
