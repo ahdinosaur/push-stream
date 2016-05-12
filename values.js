@@ -1,13 +1,13 @@
 var Stream = require('./stream')
 
-module.exports = values
+module.exports = ValuesStream
 
-function values (array) {
+function ValuesStream (array) {
   var stream = Stream()
 
   process.nextTick(function () {
     for (var i = 0; i < array.length; i++) {
-      stream.broadcast(array[i])
+      stream.push(array[i])
     }
   })
 

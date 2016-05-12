@@ -10,13 +10,19 @@ npm install --save push-stream
 
 for more asynchronous use cases, see [`pull-stream`](https://github.com/dominictarr/pull-stream).
 
-in `push-stream`, observers connect to stream using `listen`, then when any data is pushed using `broadcast` it is immediately sent to all observers.
+in `push-stream`, observers subscribe to stream by calling it, then when any data is pushed using `push` it is immediately sent to all observers.
 
 inspiration:
 
 - [geval](https://github.com/Raynos/geval)
 - [observ](https://github.com/Raynos/observ)
+- [observable](https://github.com/dominictarr/observable)
+- [rxjs](http://reactivex.io/rxjs/)
 - [es-observable](https://github.com/zenparsing/es-observable)
+- [kefir](https://rpominov.github.io/kefir/)
+- [baconjs](https://baconjs.github.io/)
+
+this is a work in progress.
 
 ## usage
 
@@ -28,43 +34,48 @@ use `push` to connect a pipeline of streams together.
 
 returns a function `removeListeners` to disconnect pipeline.
 
-### `stream = push.Stream()`
+### `stream = push.stream()`
 
-a "push stream" is an object with the following keys:
+a "push stream" is function that you call to observe stream, and returns a function to disconnect observer. it also contains a `push` function that send values to all observers.
 
-- `listen`: a function to observe stream, returns a function to remove listener
-- `broadcast`: a function to send values to all observers
+when calling stream with a observer function it will return a `removeListener` function. you can call `removeListener` to remove your observer function from the stream. after you call it your observer function will not be called with any future values coming from the stream.
 
-when calling `listen` with a observer function it will return a `removeListener` function. you can call `removeListener` to remove your observer function from the stream. after you call it your observer function will not be called with any future values coming from the stream.
-
-you can call `broadcast` each time you want to push a value to the stream. each time you call `broadcast` with a value, all observer functions that are observing the stream will be invoked with the value.
+you can call `push` each time you want to push a value to the stream. each time you call `broadcast` with a value, all observer functions that are observing the stream will be invoked with the value.
 
 ```js
 var stream = push.Stream()
 
-var removeListener = stream.listen(function (value) {
+var removeListener = stream(function (value) {
   console.log('observed', value)
 })
 
-stream.broadcast('hello') // observed hello
-stream.broadcast('world') // observed world
+stream.push('hello') // observed hello
+stream.push('world') // observed world
 
 removeListener()
 
-stream.broadcast('meow') //
+stream.push('meow') //
 ````
 
 ### `valueStream = push.values([1, 2, 3, 4, ...])`
 
 ### `mapStream = push.map(function (value) { return value })`
 
+### `filterStream = push.filter(function (value) { return true })`
+
+### `stateStream = push.state(initialState)`
+
+when you observe `stateStream`, it will immediately call the observer with the current state.
+
+if you call `stateStream` with `null` or `undefined`, it will return the current state.
+
 ### `spyStream = push.spy(function (value) { console.log(value) })`
 
-### TODO `filterStream = push.filter(function (value) { return true })`
+### `uniqStream = push.uniq()`
 
-### `watchStream = push.watch()`
+### `readableStream = push.readable(stream)`
 
-when you observe `watchStream` with `.listen`, it will immediately return it's last value, if any.
+returns a read-only copy of the given stream (without `push`).
 
 ## license
 

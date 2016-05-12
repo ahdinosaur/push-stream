@@ -1,14 +1,10 @@
-var Stream = require('./stream')
+var MapAsyncStream = require('./mapAsync')
 
-module.exports = spy
+module.exports = SpyStream
 
-function spy (lambda) {
-  var stream = Stream()
-
-  return { broadcast: broadcast, listen: stream.listen }
-
-  function broadcast (value) {
+function SpyStream (lambda) {
+  return MapAsyncStream(function (value, push) {
     lambda(value)
-    stream.broadcast(value)
-  }
+    push(value)
+  })
 }

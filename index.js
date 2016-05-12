@@ -1,9 +1,12 @@
 var push = require('./push')
 
-push.Stream = require('./stream')
-push.map = require('./map')
-push.spy = require('./spy')
-push.watch = require('./watch')
+push.stream = require('./stream')
 push.values = require('./values')
+push.map = require('./map')
+push.filter = require('./filter')
+push.state = require('./state')
+push.spy = require('./spy')
+push.readable = require('./readable')
+push.uniq = require('./uniq')
 
 module.exports = push

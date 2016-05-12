@@ -1,13 +1,9 @@
-var Stream = require('./stream')
+var MapAsyncStream = require('./mapAsync')
 
-module.exports = map
+module.exports = MapStream
 
-function map (lambda) {
-  var stream = Stream()
-
-  return { broadcast: broadcast, listen: stream.listen }
-
-  function broadcast (value) {
-    stream.broadcast(lambda(value))
-  }
+function MapStream (lambda) {
+  return MapAsyncStream(function (value, push) {
+    push(lambda(value))
+  })
 }
